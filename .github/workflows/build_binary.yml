@@ -1,3 +1,6 @@
+name: Build binary
+on: [push]
+
 jobs:
   build:
 
