@@ -15,7 +15,7 @@ jobs:
     - name: esp-idf build
       uses: espressif/esp-idf-ci-action@release-v4.4
     - name: version
-      run: echo "::set-output name=version::$(echo 4.2)"
+      run: echo "::set-output name=version::$(echo 4.3)"
       id: version
     - name: release
       uses: actions/create-release@v1
@@ -24,8 +24,16 @@ jobs:
         draft: false
         prerelease: false
         release_name: ${{ steps.version.outputs.version }}
-        tag_name: ${{ github.ref }}
+        tag_name: ${{ steps.version.outputs.version }}
 #        body_path: CHANGELOG.md
       env:
         GITHUB_TOKEN: ${{ github.token }}
-    
+    - name: upload binary artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build/esp-gh-wf.bin
+        asset_name: esp32-gh-action.bin
+        asset_content_type: application/octet-stream
