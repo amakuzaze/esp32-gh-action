@@ -24,7 +24,7 @@ jobs:
     - name: esp-idf build
       uses: espressif/esp-idf-ci-action@release-v4.4
       env:
-        SDKCONFIG_DEFAULTS: "nonexistant"
+        SDKCONFIG_DEFAULTS: "sdkconfig.release"
     - name: Write version id (git sha1) to file
       run: echo ${{ steps.get_git_hash.outputs.value }} > versionid.txt
     - name: Create release
