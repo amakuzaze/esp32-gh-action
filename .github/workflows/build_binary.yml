@@ -23,9 +23,11 @@ jobs:
       run: echo "::set-output name=value::${GITHUB_REF/refs\/tags\//}"
     - name: esp-idf build
       uses: espressif/esp-idf-ci-action@release-v4.4
+      env:
+        SDKCONFIG_DEFAULTS: "nonexistant"
     - name: Write version id (git sha1) to file
       run: echo ${{ steps.get_git_hash.outputs.value }} > versionid.txt
-    - name: release
+    - name: Create release
       uses: actions/create-release@v1
       id: create_release
       with:
