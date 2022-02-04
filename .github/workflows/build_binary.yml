@@ -16,7 +16,9 @@ jobs:
       with:
         submodules: 'recursive'
     - name: Copy sdkconfig.release to .defaults
-      run: mv sdkconfig.release sdkconfig.defaults
+      run: |
+        echo "Multicommand stuffs"
+        mv sdkconfig.release sdkconfig.defaults
     - name: Query git commit hash
       run: echo "::set-output name=value::$(git rev-parse HEAD)"
       id: get_git_hash
