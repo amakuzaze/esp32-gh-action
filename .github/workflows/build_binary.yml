@@ -41,5 +41,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: build/esp-gh-wf.bin
-        asset_name: ${{ steps.get_git_hash.outputs.value }}.bin
+        asset_name: esp32_firmware_${{ steps.get_version.outputs.value }}.bin
         asset_content_type: application/octet-stream
