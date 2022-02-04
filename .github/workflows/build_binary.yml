@@ -1,6 +1,9 @@
 ---
 name: Build binary
-on: [push: [tags]]
+on:
+  push:
+    tags:
+      - v**
 
 jobs:
   build:
