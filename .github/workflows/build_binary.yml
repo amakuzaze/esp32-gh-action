@@ -15,14 +15,17 @@ jobs:
       uses: actions/checkout@v2
       with:
         submodules: 'recursive'
-    - name: esp-idf build
-      uses: espressif/esp-idf-ci-action@release-v4.4
-    - name: hash
+    - name: Query git commit hash
       run: echo "::set-output name=value::$(git rev-parse HEAD)"
       id: get_git_hash
     - name: Get the version
       id: get_version
       run: echo "::set-output name=value::${GITHUB_REF/refs\/tags\//}"
+    - name: esp-idf build
+      uses: espressif/esp-idf-ci-action@release-v4.4
+    - name: Write version id (git sha1) to file
+      uses: get_git_hash
+      run: echo ${{ steps.get_git_hash.outputs.value }} > versionid.txt
     - name: release
       uses: actions/create-release@v1
       id: create_release
@@ -34,7 +37,7 @@ jobs:
 #        body_path: CHANGELOG.md
       env:
         GITHUB_TOKEN: ${{ github.token }}
-    - name: upload binary artifact
+    - name: Upload binary artifact
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ github.token }}
@@ -43,3 +46,12 @@ jobs:
         asset_path: build/esp-gh-wf.bin
         asset_name: esp32_firmware_${{ steps.get_version.outputs.value }}.bin
         asset_content_type: application/octet-stream
+    - name: Upload version id
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: versionid.txt
+        asset_name: versionid.txt
+        asset_content_type: text/plain
