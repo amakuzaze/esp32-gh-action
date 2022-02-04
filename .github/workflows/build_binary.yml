@@ -24,7 +24,6 @@ jobs:
     - name: esp-idf build
       uses: espressif/esp-idf-ci-action@release-v4.4
     - name: Write version id (git sha1) to file
-      uses: get_git_hash
       run: echo ${{ steps.get_git_hash.outputs.value }} > versionid.txt
     - name: release
       uses: actions/create-release@v1
